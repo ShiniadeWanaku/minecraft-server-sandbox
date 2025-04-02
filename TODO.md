@@ -1,0 +1,1 @@
+1. Create Script for Minecraft Server, Zip it and Upload it to the Google Drive using its API.
