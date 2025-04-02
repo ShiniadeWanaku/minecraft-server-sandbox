@@ -1,0 +1,1 @@
+30 23 * * * /home/shinia/server-backend/venv/bin/python ~/server-backend/upload_backup.py
