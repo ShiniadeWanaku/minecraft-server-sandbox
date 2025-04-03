@@ -1,1 +1,2 @@
-30 23 * * * /home/shinia/server-backend/venv/bin/python ~/server-backend/upload_backup.py
+# Complete Backup: Each day at 12:15 am
+15 0 * * * cd /home/shinia/server-backend && /home/shinia/server-backend/venv/bin/python upload_backup.py >> /home/shinia/server-backend/cron.log 2>&1>
