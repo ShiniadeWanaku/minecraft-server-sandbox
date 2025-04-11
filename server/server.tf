@@ -6,7 +6,7 @@ provider "azurerm" {
 
 # Resource Group
 resource "azurerm_resource_group" "rg" {
-  name     = "rg-minecraft-server-5"
+  name     = "rg-minecraft-server-4"
   location = "West US 3"
 }
 
@@ -146,37 +146,37 @@ resource "azurerm_linux_virtual_machine" "vm" {
   # Copy local files to the Virtual Machine
   # Install Docker Script
   provisioner "file" {
-    source      = "install_docker.sh"
+    source      = "scripts/install_docker.sh"
     destination = "/home/azureuser/server-backend/linux/install_docker.sh"
   }
 
   # Install Node Exporter Script
   provisioner "file" {
-    source      = "install_node_exporter.sh"
+    source      = "scripts/install_node_exporter.sh"
     destination = "/home/azureuser/server-backend/linux/install_node_exporter.sh"
   }
 
   # Docker Compose file
   provisioner "file" {
-    source      = "docker-compose.yml"
+    source      = "docker/docker-compose.yml"
     destination = "/home/azureuser/server-backend/linux/docker-compose.yml"
   }
 
   # Prometheus configuration file
   provisioner "file" {
-    source      = "prometheus.yml"
+    source      = "docker/prometheus.yml"
     destination = "/home/azureuser/server-backend/linux/prometheus.yml"
   }
 
   # Remove Docker Script
   provisioner "file" {
-    source      = "remove_docker.sh"
+    source      = "scripts/remove_docker.sh"
     destination = "/home/azureuser/server-backend/linux/remove_docker.sh"
   }
 
   # Reset Docker Compose Script
   provisioner "file" {
-    source      = "reset_docker_compose.sh"
+    source      = "scripts/reset_docker_compose.sh"
     destination = "/home/azureuser/server-backend/linux/reset_docker_compose.sh"
   }
 
@@ -194,26 +194,32 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   # Credetentials file for Python
   provisioner "file" {
-    source      = "../credentials.json"
+    source      = "../.keychain/credentials.json"
     destination = "/home/azureuser/server-backend/credentials.json"
   }
 
   # Token Pickle file for Python
   provisioner "file" {
-    source      = "../token.pickle"
+    source      = "../.keychain/token.pickle"
     destination = "/home/azureuser/server-backend/token.pickle"
   }
 
   # Start Minecraft Server Script
   provisioner "file" {
-    source      = "start.sh"
+    source      = "scripts/start.sh"
     destination = "/home/azureuser/server-backend/linux/start.sh"
   }
 
   # Minecraft Server Service File
   provisioner "file" {
-    source      = "minecraft-server.service"
+    source      = "scripts/minecraft-server.service"
     destination = "/home/azureuser/server-backend/linux/minecraft-server.service"
+  }
+
+  # Python Installer Script
+  provisioner "file" {
+    source      = "scripts/install_python.sh"
+    destination = "/home/azureuser/server-backend/linux/install_python.sh"
   }
 
   # Execute the scripts on the VM
@@ -223,7 +229,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
       "sudo /home/azureuser/server-backend/linux/install_docker.sh > ~/install_docker.log 2>&1",
       "chmod +x /home/azureuser/server-backend/linux/install_node_exporter.sh > ~/install_node_exporter.log 2>&1",
       "sudo /home/azureuser/server-backend/linux/install_node_exporter.sh > ~/install_node_exporter.log 2>&1",
-      "sudo docker compose -f /home/azureuser/server-backend/linux/docker-compose.yml up -d > ~/docker-compose.log 2>&1"
+      "sudo docker compose -f /home/azureuser/server-backend/linux/docker-compose.yml up -d > ~/docker-compose.log 2>&1",
+      "chmod +x /home/azureuser/server-backend/linux/install_python.sh > ~/install_python.log 2>&1",
+      "sudo /home/azureuser/server-backend/linux/install_python.sh > ~/install_python.log 2>&1"
     ]
   }
 
