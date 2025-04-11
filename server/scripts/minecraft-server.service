@@ -1,0 +1,14 @@
+[Unit]
+Description=Minecraft Server
+After=network.target
+
+[Service]
+User=shinia
+Nice=1
+KillMode=none
+WorkingDirectory=/home/azureuser/server-backend/linux
+ExecStart=/home/azureuser/server-backend/linux/start.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
